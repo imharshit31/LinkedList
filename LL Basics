@@ -1,0 +1,178 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// All the basic question of LL are done in the form of functions, which can be implemented by main function (Line 166)
+
+struct Node{
+    int val;
+    
+    Node *next;
+    
+    Node(int x){
+        val=x;
+        next=NULL;
+    }
+};
+
+vector<int> returnList(Node* head){
+    
+    Node *curr=head;
+    vector<int> v;
+    
+    while(curr){
+        v.push_back(curr->val);
+        curr=curr->next;
+    }
+    
+    return v;
+}
+
+void returnListRec(Node* head, vector<int> &v){
+    
+    //Adding values of LinkedList to v by recursion
+    
+    if(!head) return;
+    //We'll directly return in case of No Nodes
+    
+    v.push_back(head->val);
+    returnListRec(head->next,v);
+    // We will add the current value and call for the remaining LL
+    
+    /*
+    Note: We can swap push back and returnLL statements if we want to add the values in opposite order
+    */
+}
+
+void insertAtHead(Node* &head, int val){
+    
+    Node* curr=head;
+    head=new Node(val);
+    head->next=curr;
+}
+
+void insertAtTail(Node* &head, int val){
+    
+    if(!head){
+        head = new Node(val);
+        return;
+    }
+    
+    Node* curr=head;
+    
+    //We will traverse till the last node
+    
+    while(curr->next)
+        curr=curr->next;
+    
+    // and add a new node
+    
+    curr->next=new Node(val);
+}
+
+void deleteFirstNode(Node* &head){
+    
+    if(head){
+        Node* toDelete = head;
+        head=head->next;
+        delete toDelete;
+    }
+    
+}
+
+void deleteLastNode(Node* &head){
+    
+    if(head){
+        
+        //If there are Nodes
+        
+        if(!(head->next)){
+            
+            // In case of 1 Node
+            
+            head=NULL;
+            return;
+        }
+        
+        //In case of >1 Nodes
+        
+        Node* curr=head;
+        while(curr->next->next)
+            curr=curr->next;
+        
+        Node* toDelete=curr->next;
+        curr->next=NULL;
+        delete toDelete;
+    }
+}
+
+void insertAtAGivenPosition(Node* &head, int pos, int val){
+    
+    if(pos<=0) return;
+    
+    if(pos==1){
+        //Special case for first position
+        Node* n = new Node(val);
+        n->next=head;
+        head=n;
+        return;
+    }
+    
+    //We need to reach 1 node before position and for that we have to traverse 2 steps less than pos
+    
+    pos--;
+    
+    Node*curr = head;
+    
+    while(--pos and curr->next)
+        curr=curr->next;
+    
+    
+    if(!pos){
+        
+        //If pos==0, this means we have escaped out of while loop due to pos and not because curr->next became NULL, this allows us to add Node
+        
+        Node* forw = NULL;
+        if(curr->next) forw=curr->next;
+        curr->next = new Node(val);
+        curr->next->next=forw;
+    }
+    
+}
+
+int searchInLL(Node* &head, int what){
+    
+    if(!head) return -1;
+    
+    int pos=0;
+    Node* curr=head;
+    
+    while(curr){
+        if(curr->val == what) return pos;
+        curr=curr->next;
+        pos++;
+    }
+    
+    return -1;
+    //We will return -1 if we dont find the value even after traversing whole LL
+}
+
+int searchInLLRec(Node* head, int what, int ind){
+    if(!head) return -1;
+    
+    if(head->val == what) return ind;
+    return searchInLLRec(head->next, what, ind+1);
+}
+
+int main() {
+    
+    Node* head = new Node(10);
+    head->next = new Node(20);
+    head->next->next = new Node(30);
+    
+    
+    vector<int> v = returnList(head);
+    for(auto a: v) cout<<a<<" ";
+    
+    
+    return 0;
+}
