@@ -1,0 +1,114 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct DNode{
+    int val;
+    DNode* next;
+    DNode* prev;
+    
+    DNode(int x){
+        val=x;
+        next=NULL;
+        prev=NULL;
+    }
+};
+
+vector<int> printDLL(DNode* &head){
+    
+    DNode* curr=head;
+    vector<int> v;
+    
+    while(curr){
+        v.push_back(curr->val);
+        curr=curr->next;
+    }
+    return v;
+}
+
+void insertAtBeginningDLL(DNode* &head, int x){
+    
+    DNode* n = new DNode(x);
+    n->next = head;
+    if(head) head->prev = n;
+    head=n;
+    
+}
+
+void insertAtEndDLL(DNode* &head, int x){
+    
+    DNode* curr=head;
+    
+    while(curr and curr->next) curr=curr->next;
+    
+    DNode* n = new DNode(x);
+    
+    if(!curr) head=n;
+    else{
+        curr->next = n;
+        n->prev = curr;
+    }
+    
+}
+
+void deleteFirstNodeDLL(DNode* &head){
+    
+    if(head){
+        DNode* toDelete = head;
+        
+        if(head->next){
+            DNode* ahead = head->next;
+            ahead->prev = NULL;
+            head=ahead;
+        }else head=NULL;
+        
+        delete toDelete;
+    }
+}
+
+void deleteLastNodeDLL(DNode* &head){
+    
+    if(head){
+        DNode* curr=head;
+        if(!(curr->next)){
+            delete curr;
+            head=NULL;
+            return;
+        }
+        while(curr->next){
+            curr=curr->next;
+        }
+        curr->prev->next=NULL;
+        delete curr;
+    }
+}
+
+void reverseDLL(DNode* &head){
+    
+}
+
+
+
+int main() {
+    
+    DNode* head = new DNode(10);
+    DNode* temp1 = new DNode(20);
+    DNode* temp2 = new DNode(30);
+    
+    head->next = temp1;
+    temp1->prev = head;
+    temp1->next = temp2;
+    temp2->prev = temp1;
+    
+    DNode* empty = NULL;
+    DNode* oneN = new DNode(50);
+    
+    deleteLastNodeDLL(head);
+    //Can try and function here
+    
+    vector<int> v = printDLL(head);
+    
+    for(auto a: v) cout<<a<<" ";
+    
+    return 0;
+}
